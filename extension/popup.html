@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="server-banner" class="banner hidden">
+    Analysis server not running. Start it with: <code>./start_server.sh</code>
+  </div>
+
+  <!-- =========================================================
+       SETUP — New / Edit Flow form (opens by default)
+       ========================================================= -->
+  <section id="state-setup">
+    <header class="hdr">
+      <button class="back-btn hidden" id="setup-back" title="Back">←</button>
+      <h2 id="setup-title">New Flow</h2>
+    </header>
+
+    <form id="flow-form" novalidate>
+      <label>Flow Name <span class="req">*</span>
+        <input type="text" name="flow_name" placeholder="e.g. Credit Card Application" required />
+      </label>
+
+      <label>Client <span class="req">*</span>
+        <input type="text" name="client" list="client-list" placeholder="Type or pick a client" autocomplete="off" required />
+        <datalist id="client-list"></datalist>
+      </label>
+
+      <label>Platform <span class="req">*</span>
+        <select name="platform" required>
+          <option value="">—</option>
+          <option>Web</option>
+          <option>iOS</option>
+          <option>Android</option>
+        </select>
+      </label>
+
+      <label>Target User
+        <input type="text" name="target_user" placeholder="Existing customer, mobile-first" />
+      </label>
+
+      <label>User Goal
+        <input type="text" name="user_goal" placeholder="Apply for a credit card in under 3 minutes" />
+      </label>
+
+      <div class="form-actions">
+        <button type="button" class="btn ghost tight hidden" id="setup-cancel">Cancel</button>
+        <button type="submit" class="btn primary tight" id="setup-submit" disabled>Begin Capture</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- =========================================================
+       ACTIVE — Recording in progress
+       ========================================================= -->
+  <section id="state-active" class="hidden">
+    <div class="active-wrap">
+      <div class="active-head">
+        <div class="rec-row">
+          <span class="rec-dot"></span>
+          <span class="rec-label" id="active-flow-name">—</span>
+        </div>
+        <button id="edit-details-btn" class="icon-btn" title="Edit flow details" aria-label="Edit flow details">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="counter" id="counter">— states · — screens</div>
+
+      <button id="save-btn" class="btn primary">Save</button>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

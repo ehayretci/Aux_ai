@@ -1,0 +1,476 @@
+{
+  "kredi-kart-ba-vuru/state_3/02_outro.png": {
+    "image_path": "screenshots/kredi-kart-ba-vuru/state_3/02_outro.png",
+    "overall_score": 5,
+    "score_rationale": "The screen exhibits significant usability and accessibility flaws, including a lack of visible focus indicators for keyboard navigation and misleading information architecture elements, despite strong overall content organization.",
+    "critical_issues_count": 5,
+    "top_priority_finding": "No visible focus indicators are present on interactive elements, which could impair keyboard navigation and accessibility for users who do not use a mouse.",
+    "findings": [
+      {
+        "element": "Notification icon with badge",
+        "position": {
+          "x": 67.0,
+          "y": 55.0
+        },
+        "finding": "A red numerical badge on the bell icon clearly communicates the presence and quantity of pending notifications.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Functional Usability"
+      },
+      {
+        "element": "Right-hand persistent bar 'Internet \u015eubesi \u015eifresi Almak \u0130stiyorum'",
+        "position": {
+          "x": 82.0,
+          "y": 16.0
+        },
+        "finding": "A large, blue, sticky bar on the right side of the screen offers a key action, creating a prominent element that can compete for user attention.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Functional Usability"
+      },
+      {
+        "element": "Credit card action buttons ('Hemen Ba\u015fvur', '+ Detayl\u0131 Bilgi')",
+        "position": {
+          "x": 26.0,
+          "y": 72.0
+        },
+        "finding": "Each credit card product listing consistently provides a primary 'Hemen Ba\u015fvur' (Apply Now) button and a secondary '+ Detayl\u0131 Bilgi' (More Info) button.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Functional Usability"
+      },
+      {
+        "element": "Overall page navigation",
+        "position": {
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The screen lacks visible breadcrumbs or a dedicated 'back' button to assist users in understanding their navigational depth or returning to a previous state.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Functional Usability"
+      },
+      {
+        "element": "Global Navigation Tabs ('Kendim i\u00e7in', '\u0130\u015fim i\u00e7in')",
+        "position": {
+          "x": 35.0,
+          "y": 6.0
+        },
+        "finding": "The primary navigation tabs 'Kendim i\u00e7in' and '\u0130\u015fim i\u00e7in' are highly visible and effectively segment the main content for two distinct user categories.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Top Right Action Group (Search, Notifications, 'Yapi Kredi Ol', '\u0130nternet \u015eubesi')",
+        "position": {
+          "x": 75.0,
+          "y": 6.0
+        },
+        "finding": "Essential but distinct actions like search, notifications, new customer signup, and existing customer login are visually grouped without strong differentiation in priority, potentially increasing cognitive load.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "+ Detayl\u0131 Bilgi' buttons in blue header",
+        "position": {
+          "x": 30.0,
+          "y": 17.0
+        },
+        "finding": "Identically styled '+ Detayl\u0131 Bilgi' buttons are present in a blue header bar above groups of products, lacking clear labels to indicate what specific information they will reveal.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Individual Credit Card Product Blocks",
+        "position": {
+          "x": 30.0,
+          "y": 55.0
+        },
+        "finding": "Each credit card product is presented in a well-defined block, consistently grouping the card image, name, description, and primary/secondary action buttons.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Action Buttons within Product Blocks ('Hemen Ba\u015fvur' vs. '+ Detayl\u0131 Bilgi')",
+        "position": {
+          "x": 30.0,
+          "y": 75.0
+        },
+        "finding": "Within each product display, the 'Hemen Ba\u015fvur' button is visually prioritised over the '+ Detayl\u0131 Bilgi' button, establishing a clear hierarchy for user actions.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Sticky Password Retrieval Panel ('\u0130nternet \u015eubesi \u015eifresi Almak \u0130stiyorum')",
+        "position": {
+          "x": 88.0,
+          "y": 16.0
+        },
+        "finding": "A floating sticky panel prominently displays the '\u0130nternet \u015eubesi \u015eifresi Almak \u0130stiyorum' function, ensuring constant visibility and quick access for users needing this specific support.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Header primary buttons",
+        "position": {
+          "x": 85.5,
+          "y": 3.5
+        },
+        "finding": "The prominent colors (blue and red) and distinct rectangular shapes clearly differentiate the 'Yap\u0131 Kredi Ol' and 'Internet \u015eubesi' elements as primary interactive buttons.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Credit card descriptions",
+        "position": {
+          "x": 29.5,
+          "y": 55.0
+        },
+        "finding": "The descriptive text for each credit card product uses a small font size and light grey color, which reduces its overall readability.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Credit card product layout",
+        "position": {
+          "x": 50.0,
+          "y": 55.0
+        },
+        "finding": "The three credit card product cards are presented with consistent horizontal spacing and uniform vertical alignment, creating a structured and orderly layout.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Visual Design"
+      },
+      {
+        "element": "+ Detayl\u0131 Bilgi' buttons",
+        "position": {
+          "x": 29.5,
+          "y": 79.0
+        },
+        "finding": "The '+ Detayl\u0131 Bilgi' buttons, with their light blue background and dark blue text, have lower contrast compared to the primary 'Hemen Ba\u015fvur' buttons, making them visually secondary.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Active header navigation item",
+        "position": {
+          "x": 35.0,
+          "y": 3.5
+        },
+        "finding": "The active navigation item '\u0130\u015fim i\u00e7in' uses a strong dark blue text color on a white background and a distinct blue underline, ensuring high visibility and clear indication of its selected state.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Right sidebar panel",
+        "position": {
+          "x": 87.0,
+          "y": 19.0
+        },
+        "finding": "The right-aligned '\u0130nternet \u015eubesi \u015eifresi Almak \u0130stiyorum' informational panel appears as a fixed-width element, which might present layout challenges on narrower viewports.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Main content area with credit card listings",
+        "position": {
+          "x": 50.0,
+          "y": 60.0
+        },
+        "finding": "The screen immediately presents multiple distinct credit card products with images, titles, and brief descriptions, requiring initial comparison by the user.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Onboarding & Time-to-Value"
+      },
+      {
+        "element": "Floating 'Internet \u015eubesi \u015eifresi Almak \u0130stiyorum' box",
+        "position": {
+          "x": 87.0,
+          "y": 15.0
+        },
+        "finding": "A persistent floating box offering to get an 'Internet Branch Password' is visible, which may be irrelevant or confusing for a user who has not yet engaged with a product or become a customer.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Onboarding & Time-to-Value"
+      },
+      {
+        "element": "'Hemen Ba\u015fvur' (Apply Now) buttons for each card",
+        "position": {
+          "x": 50.0,
+          "y": 80.0
+        },
+        "finding": "Each individual credit card product clearly features a prominent 'Apply Now' call-to-action, indicating the primary path forward for interested users.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Onboarding & Time-to-Value"
+      },
+      {
+        "element": "'Yap\u0131 Kredi Ol' (Become a Yap\u0131 Kredi Customer) button",
+        "position": {
+          "x": 83.0,
+          "y": 5.0
+        },
+        "finding": "A distinct 'Become a Yap\u0131 Kredi Customer' button in the global header offers a clear and broad entry point for new users not specifically interested in a credit card yet.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Onboarding & Time-to-Value"
+      },
+      {
+        "element": "Text link \"Internet \u015eubesi \u015eifresi Almak \u0130stiyorum\"",
+        "position": {
+          "x": 88.5,
+          "y": 15.0
+        },
+        "finding": "The blue text \"Internet \u015eubesi \u015eifresi Almak \u0130stiyorum\" against the blue background exhibits a low color contrast ratio, potentially hindering readability for some users.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "Notification bell icon with '3'",
+        "position": {
+          "x": 67.5,
+          "y": 5.5
+        },
+        "finding": "The notification bell icon appears to be smaller than the recommended 44x44px touch target size, which may increase the likelihood of inaccurate taps on mobile devices.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "Search input field \"Ara...\"",
+        "position": {
+          "x": 55.0,
+          "y": 5.5
+        },
+        "finding": "The search input field, including its placeholder text and magnifying glass icon, appears to have insufficient height to meet the 44x44px touch target recommendation.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "Cookie icon",
+        "position": {
+          "x": 3.5,
+          "y": 95.0
+        },
+        "finding": "The cookie icon in the bottom-left corner is presented without adjacent text, suggesting reliance on an ARIA label for screen reader users, which is not visibly verifiable from the image.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "All interactive elements (e.g., buttons, links)",
+        "position": {
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "No visible focus indicators are present on interactive elements, which could impair keyboard navigation and accessibility for users who do not use a mouse.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "\"Hemen Ba\u015fvur\" buttons",
+        "position": {
+          "x": 34.0,
+          "y": 70.0
+        },
+        "finding": "The white text on the dark blue \"Hemen Ba\u015fvur\" buttons provides a strong color contrast ratio, supporting good readability.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Accessibility"
+      }
+    ],
+    "orchestrator": {
+      "screen_type": "data_display",
+      "complexity": "high",
+      "complexity_reasoning": "The screen features a rich header with navigation and actions, multiple detailed product cards, various interactive buttons and links, and persistent floating elements.",
+      "agents_to_run": [
+        "usability",
+        "information_architecture",
+        "visual_design",
+        "onboarding",
+        "accessibility"
+      ],
+      "agents_skipped": []
+    },
+    "screenshot_path": "kredi-kart-ba-vuru/state_3/02_outro.png",
+    "screen_id": "kredi-kart-ba-vuru/state_3/02_outro.png",
+    "state_name": "State 3",
+    "screen_number": 2
+  },
+  "kredi-kart-ba-vuru/state_3/01_intro.png": {
+    "image_path": "screenshots/kredi-kart-ba-vuru/state_3/01_intro.png",
+    "overall_score": 4,
+    "score_rationale": "Despite some clear structural and visual positives, the presence of multiple high-severity accessibility issues and several medium-severity usability and information architecture flaws indicates significant problems that will cause users to struggle.",
+    "critical_issues_count": 2,
+    "top_priority_finding": "The most critical issue involves the top header utility links, which exhibit both low color contrast, failing WCAG AA requirements, and insufficient touch target sizes, creating significant accessibility barriers.",
+    "findings": [
+      {
+        "element": "Main content heading 'Kredi Kartlar\u0131'",
+        "position": {
+          "x": 20.0,
+          "y": 62.0
+        },
+        "finding": "The main content heading 'Kredi Kartlar\u0131' uses the identical text label as the active, clickable item in the right sidebar navigation, which could cause slight ambiguity regarding interactivity of the heading.",
+        "severity": "Low",
+        "polarity": "negative",
+        "category": "Functional Usability"
+      },
+      {
+        "element": "\u0130nternet \u015eubesi button",
+        "position": {
+          "x": 88.0,
+          "y": 8.0
+        },
+        "finding": "The red background and distinct icon of the '\u0130nternet \u015eubesi' button visually elevate its importance compared to adjacent navigation elements.",
+        "severity": "High",
+        "polarity": "positive",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Notification badge with count '3'",
+        "position": {
+          "x": 63.0,
+          "y": 8.0
+        },
+        "finding": "The numerical count '3' within the notification badge is relatively small, which could slightly impact its immediate legibility.",
+        "severity": "Low",
+        "polarity": "negative",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Main content area and sidebar layout",
+        "position": {
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The wide, two-column desktop layout with a prominent hero image section will require significant re-arrangement for effective display on smaller screens.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Visual Design"
+      },
+      {
+        "element": "Main introductory text paragraph",
+        "position": {
+          "x": 40.0,
+          "y": 80.0
+        },
+        "finding": "A substantial block of introductory text appears before any visual or structured listing of individual credit card products.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Top right utility navigation",
+        "position": {
+          "x": 75.0,
+          "y": 5.0
+        },
+        "finding": "The top right utility bar presents a high density of links and action buttons within a confined space.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Kendim i\u00e7in / \u0130\u015fem i\u00e7in tabs",
+        "position": {
+          "x": 25.0,
+          "y": 12.0
+        },
+        "finding": "The 'Kendim i\u00e7in' (For myself) and '\u0130\u015fem i\u00e7in' (For business) tabs at the top clearly segment the site's content for different user types.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Right sidebar navigation",
+        "position": {
+          "x": 80.0,
+          "y": 60.0
+        },
+        "finding": "The right sidebar effectively groups related card products and actions with clear navigational labels.",
+        "severity": "Low",
+        "polarity": "positive",
+        "category": "Information Architecture"
+      },
+      {
+        "element": "Top header utility links",
+        "position": {
+          "x": 75.0,
+          "y": 3.0
+        },
+        "finding": "The light grey text of the top header utility links on a white background likely does not meet WCAG AA contrast requirements for normal text.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "Top header utility links",
+        "position": {
+          "x": 75.0,
+          "y": 3.0
+        },
+        "finding": "The interactive areas for the top header utility links appear visually small, potentially falling below the recommended 44x44px touch target size.",
+        "severity": "High",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "Search (magnifying glass) icon",
+        "position": {
+          "x": 40.0,
+          "y": 10.0
+        },
+        "finding": "The standalone magnifying glass icon, which implies a search action, requires an appropriate ARIA label for screen reader users.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Accessibility"
+      },
+      {
+        "element": "Floating chat icon",
+        "position": {
+          "x": 96.0,
+          "y": 90.0
+        },
+        "finding": "The floating chat bubble icon, likely an interactive element for customer service, requires an ARIA label for screen reader clarity.",
+        "severity": "Medium",
+        "polarity": "negative",
+        "category": "Accessibility"
+      }
+    ],
+    "orchestrator": {
+      "screen_type": "data_display",
+      "complexity": "high",
+      "complexity_reasoning": "The screen features a complex header with multiple navigation items, search, and action buttons, a hero section, detailed content, a multi-level sidebar navigation, and floating interactive elements.",
+      "agents_to_run": [
+        "usability",
+        "visual_design",
+        "information_architecture",
+        "accessibility"
+      ],
+      "agents_skipped": [
+        {
+          "agent": "onboarding",
+          "reason": "This screen is a product information page, not typically part of an initial user onboarding journey."
+        }
+      ]
+    },
+    "screenshot_path": "kredi-kart-ba-vuru/state_3/01_intro.png",
+    "screen_id": "kredi-kart-ba-vuru/state_3/01_intro.png",
+    "state_name": "State 3",
+    "screen_number": 1
+  }
+}

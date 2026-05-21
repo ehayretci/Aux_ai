@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>UX Flow Canvas</title>
+  <link rel="stylesheet" href="/static/canvas.css" />
+</head>
+<body>
+  <div id="topbar">
+    <div class="left">
+      <a href="/" class="back" title="Back to sessions">←</a>
+      <div class="title-block">
+        <span class="session-name" id="session-name" title="Click to rename">—</span>
+        <span class="status-dot" id="status-dot" data-recording="false" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="right">
+      <button id="analyse-flow-btn" class="flow-btn" title="Run flow-level analysis on every screen">
+        <svg class="flow-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 3v4"/><path d="M3 5h4"/>
+          <path d="M19 17v4"/><path d="M17 19h4"/>
+          <path d="M14 4l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z"/>
+        </svg>
+        <span class="flow-btn-label">Analyse Flow</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="viewport">
+    <div id="world">
+      <div id="frames"></div>
+    </div>
+  </div>
+
+  <svg id="connections" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="6" markerHeight="6" orient="auto-start-reverse"
+              markerUnits="userSpaceOnUse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff3b30" />
+      </marker>
+    </defs>
+  </svg>
+
+  <!-- Bottom-center pill toolbar (Figma-style canvas controls) -->
+  <div id="canvas-controls" class="canvas-controls" role="toolbar" aria-label="Canvas controls">
+    <button class="cc-btn" id="zoom-out-btn" title="Zoom out">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <span class="cc-zoom-label" id="zoom-label">60%</span>
+    <button class="cc-btn" id="zoom-in-btn" title="Zoom in">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <span class="cc-divider"></span>
+    <button class="cc-btn" id="fit-btn" title="Fit to screen">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 4 20 10 20"/><polyline points="20 10 20 4 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+    </button>
+    <button class="cc-btn" id="reset-btn" title="Reset view">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    </button>
+  </div>
+
+  <!-- Loading overlay shown during analysis. Driven by SSE progress events. -->
+  <div id="analysis-loader" class="loader hidden" aria-hidden="true">
+    <div class="loader-card">
+      <div class="loader-title" id="loader-title">Preparing analysis…</div>
+      <div class="loader-subtitle" id="loader-subtitle">This usually takes 30–60 seconds.</div>
+      <ul class="loader-steps" id="loader-steps">
+        <li data-step="complexity_assessment">Assessing screen complexity…</li>
+        <li data-step="usability">Running Usability Analysis…</li>
+        <li data-step="information_architecture">Running Information Architecture Analysis…</li>
+        <li data-step="visual_design">Running Visual Design Analysis…</li>
+        <li data-step="onboarding">Running Onboarding Analysis…</li>
+        <li data-step="accessibility">Running Accessibility Analysis…</li>
+        <li data-step="flow_analysis" class="optional">Analysing User Flow…</li>
+        <li data-step="synthesis">Synthesising findings…</li>
+        <li data-step="report_generation">Generating Report…</li>
+      </ul>
+      <button class="loader-cancel" id="loader-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       Reusable in-canvas overlay — used for SCREEN analysis.
+       The flow overlay below shares the same shell pattern but
+       has a different body layout.
+       ========================================================= -->
+  <div id="canvas-overlay" class="canvas-overlay hidden" aria-hidden="true">
+    <div class="cov-backdrop" data-overlay-close></div>
+    <div class="cov-shell">
+      <header class="cov-head">
+        <div class="cov-nav">
+          <button class="cov-nav-btn" id="cov-prev" title="Previous screen" aria-label="Previous screen">‹</button>
+          <div class="cov-title">
+            <span class="cov-state-label" id="cov-state-label">—</span>
+            <span class="cov-position" id="cov-position">Screen — of —</span>
+          </div>
+          <button class="cov-nav-btn" id="cov-next" title="Next screen" aria-label="Next screen">›</button>
+        </div>
+        <button class="cov-close" id="cov-close" title="Close" aria-label="Close overlay">×</button>
+      </header>
+
+      <div class="cov-body" id="cov-body">
+        <!-- Filled at runtime by canvas.js (renderScreenAnalysisIntoOverlay) -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       Flow analysis loader — distinct from the screen loader.
+       Darker backdrop, 5 sequential steps, step counter.
+       ========================================================= -->
+  <div id="flow-loader" class="loader flow-loader hidden" aria-hidden="true">
+    <div class="flow-loader-card">
+      <div class="flow-loader-eyebrow">Analysing User Flow</div>
+      <div class="flow-loader-flow-name" id="flow-loader-flow-name">—</div>
+      <div class="flow-loader-counter">
+        Step <span id="flow-loader-step-num">1</span> of 5
+      </div>
+      <ul class="flow-loader-steps" id="flow-loader-steps">
+        <li data-step="preparing_context">Preparing flow context</li>
+        <li data-step="objective_analysis">Running Objective Flow Analysis</li>
+        <li data-step="contextual_analysis">Running Contextual Flow Analysis</li>
+        <li data-step="synthesising">Synthesising findings</li>
+        <li data-step="generating_report">Generating report</li>
+      </ul>
+      <button class="loader-cancel" id="flow-loader-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       Flow analysis overlay — shown after the loader completes.
+       Shares the canvas-overlay shell pattern; no horizontal
+       arrow nav (this is one report covering the whole journey).
+       ========================================================= -->
+  <div id="flow-overlay" class="canvas-overlay flow-overlay hidden" aria-hidden="true">
+    <div class="cov-backdrop" data-overlay-close></div>
+    <div class="cov-shell">
+      <header class="cov-head">
+        <div class="cov-title-block">
+          <span class="cov-state-label" id="flow-overlay-title">Flow Analysis</span>
+          <span class="cov-position" id="flow-overlay-subtitle">—</span>
+        </div>
+        <button class="cov-close" id="flow-overlay-close" title="Close" aria-label="Close flow analysis">×</button>
+      </header>
+
+      <div class="fcov-body" id="flow-overlay-body">
+        <!-- Filled at runtime by canvas.js (renderFlowAnalysisIntoOverlay) -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.SESSION_ID = {{ session_id|tojson }};
+  </script>
+  <script src="/static/canvas.js"></script>
+</body>
+</html>

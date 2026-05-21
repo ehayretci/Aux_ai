@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "UX Flow Capturer",
+  "version": "2.0",
+  "description": "Capture user flows step-by-step as state-based UI flow maps",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "UX Flow Capturer"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

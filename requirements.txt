@@ -1,0 +1,17 @@
+# Core web framework
+fastapi
+uvicorn[standard]
+sse-starlette
+python-multipart
+
+# Legacy Flask deps (kept for any tooling that imports them; the live server is FastAPI)
+flask
+flask-cors
+
+# AI / Image
+google-generativeai
+Pillow
+python-dotenv
+
+# Knowledge base
+chromadb

@@ -1,0 +1,451 @@
+{
+  "journey_score": 4,
+  "flow_narrative": "A Yap\u0131 Kredi customer seeking a credit card begins their journey on a generic bank homepage, forcing them to navigate through several overview screens (1-7) before finally reaching specific card details. This prolonged path, rather than a direct landing, introduces early friction. Upon selecting a card like 'Crystal' on Screen 7, the user is abruptly directed to a multi-step application form (Screen 8) without a clear 'Apply for *this* card' call-to-action on the detail page itself, creating a significant commitment jump. Crucially, the application form provides no inline validation or error states, leaving the user guessing when mistakes are made. The flow culminates in an SMS verification on Screen 13, but then fails to provide any confirmation or clear next steps, leaving the user uncertain if their application was successful or what to expect next.",
+  "findings": [
+    {
+      "category": "Consistency",
+      "severity": "Low",
+      "screen_numbers": [
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "position": {
+        "screen_number": 6,
+        "x": 82.0,
+        "y": 16.0
+      },
+      "finding": "The prominent sticky 'Internet \u015eubesi \u015eifresi Almak \u0130stiyorum' bar consistently appears on Screens 3-6 but disappears when the user enters the application form on Screen 8, creating an inconsistent persistent element."
+    },
+    {
+      "category": "Consistency",
+      "severity": "Low",
+      "screen_numbers": [
+        6,
+        12,
+        13
+      ],
+      "position": {
+        "screen_number": 6,
+        "x": 26.0,
+        "y": 72.0
+      },
+      "finding": "The primary call-to-action button, 'Hemen Ba\u015fvur' (Apply Now) or 'Devam' (Continue), exhibits minor stylistic differences in button shade and hover states between the card selection screens (Screen 6) and the application form screens (Screens 12, 13)."
+    },
+    {
+      "category": "Drop-off Risk",
+      "severity": "High",
+      "screen_numbers": [
+        7,
+        8
+      ],
+      "position": {
+        "screen_number": 8,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "The transition from viewing a specific credit card's details (Screen 7) directly to a multi-step application form requesting sensitive identity information (Screen 8) represents a significant jump in commitment and cognitive load."
+    },
+    {
+      "category": "Feedback",
+      "severity": "High",
+      "screen_numbers": [
+        13
+      ],
+      "position": {
+        "screen_number": 13,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "The flow concludes with an SMS verification step on Screen 13, but lacks a clear confirmation screen or explicit communication of next steps, leaving the user unsure of the application's final outcome."
+    },
+    {
+      "category": "Feedback",
+      "severity": "High",
+      "screen_numbers": [
+        8,
+        10,
+        11,
+        12,
+        13
+      ],
+      "position": {
+        "screen_number": 11,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "There are no visible error states or specific inline validation messages shown for incorrect or incomplete inputs in the application form fields across Screens 8-12, potentially leaving users unsure how to correct mistakes."
+    },
+    {
+      "category": "Navigation",
+      "severity": "Medium",
+      "screen_numbers": [
+        8,
+        10,
+        11,
+        12,
+        13
+      ],
+      "position": {
+        "screen_number": 10,
+        "x": 5.0,
+        "y": 15.0
+      },
+      "finding": "The multi-step application form (Screens 8-13) does not include an explicit 'Back' button for users to easily return to and edit previous steps within the form."
+    },
+    {
+      "category": "CTA Clarity",
+      "severity": "Medium",
+      "screen_numbers": [
+        7
+      ],
+      "position": {
+        "screen_number": 7,
+        "x": 80.0,
+        "y": 25.0
+      },
+      "finding": "Screen 7, which provides details for a specific credit card ('Crystal'), lacks a prominent primary call-to-action button to directly start the application for that card, relying instead on a general sticky CTA on the right side."
+    },
+    {
+      "category": "Accessibility",
+      "severity": "High",
+      "screen_numbers": [
+        6,
+        8,
+        10,
+        11,
+        12,
+        13
+      ],
+      "position": {
+        "screen_number": 6,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "There are no visible focus indicators on interactive elements throughout the journey, particularly noticeable on the card selection buttons (Screen 6) and form fields (Screens 8, 10-13), which impedes keyboard navigation."
+    },
+    {
+      "category": "Landing Relevance",
+      "severity": "Medium",
+      "screen_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "position": {
+        "screen_number": 1,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "The user's journey begins on a generic Yap\u0131 Kredi bank homepage (Screens 1-2) rather than a direct 'Kredi Kart\u0131 Ba\u015fvuru' landing page, necessitating several navigation steps through general bank and card overview pages to reach the application form."
+    },
+    {
+      "category": "Goal Alignment",
+      "severity": "Low",
+      "screen_numbers": [
+        8,
+        9
+      ],
+      "position": {
+        "screen_number": 9,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "Extensive marketing content about 'Yap\u0131 Kredi World D\u00fcnyas\u0131 Ayr\u0131cal\u0131klar\u0131' (Screen 9) is displayed within the 'Kredi Kart\u0131 Ba\u015fvuru' form, which may distract users from completing their application."
+    },
+    {
+      "category": "Mobile Risk",
+      "severity": "High",
+      "screen_numbers": [
+        13
+      ],
+      "position": {
+        "screen_number": 13,
+        "x": 50.0,
+        "y": 50.0
+      },
+      "finding": "The 'Kredi Kart\u0131 Ba\u015fvuru' flow requires an SMS OTP verification on Screen 13 with a visible timer, posing a high risk of interruption and potential loss of context for users on mobile devices who may need to switch apps."
+    },
+    {
+      "category": "Contextual",
+      "severity": "Low",
+      "screen_numbers": [
+        12
+      ],
+      "position": {
+        "screen_number": 12,
+        "x": 25.0,
+        "y": 65.0
+      },
+      "finding": "The inclusion of a consent checkbox on Screen 12, allowing Yap\u0131 Kredi to contact the user if their application is interrupted, is a good practice for customer support and trust in a financial application."
+    },
+    {
+      "category": "Contextual",
+      "severity": "Low",
+      "screen_numbers": [
+        11
+      ],
+      "position": {
+        "screen_number": 11,
+        "x": 50.0,
+        "y": 85.0
+      },
+      "finding": "The presence of detailed information regarding KVKK (Turkish Personal Data Protection Law) on Screen 11 appropriately addresses regulatory requirements for a financial service application by Yap\u0131 Kredi."
+    }
+  ],
+  "journey_metrics": {
+    "total_steps": 13,
+    "benchmark_steps": 7,
+    "benchmark_comparison": "above"
+  },
+  "objective": {
+    "findings": [
+      {
+        "category": "Consistency",
+        "severity": "Low",
+        "screen_numbers": [
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "position": {
+          "screen_number": 6,
+          "x": 82.0,
+          "y": 16.0
+        },
+        "finding": "The prominent sticky 'Internet \u015eubesi \u015eifresi Almak \u0130stiyorum' bar consistently appears on Screens 3-6 but disappears when the user enters the application form on Screen 8, creating an inconsistent persistent element."
+      },
+      {
+        "category": "Consistency",
+        "severity": "Low",
+        "screen_numbers": [
+          6,
+          12,
+          13
+        ],
+        "position": {
+          "screen_number": 6,
+          "x": 26.0,
+          "y": 72.0
+        },
+        "finding": "The primary call-to-action button, 'Hemen Ba\u015fvur' (Apply Now) or 'Devam' (Continue), exhibits minor stylistic differences in button shade and hover states between the card selection screens (Screen 6) and the application form screens (Screens 12, 13)."
+      },
+      {
+        "category": "Consistency",
+        "severity": "High",
+        "screen_numbers": [
+          7,
+          8
+        ],
+        "position": {
+          "screen_number": 8,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The transition from viewing a specific credit card's details (Screen 7) directly to a multi-step application form requesting sensitive identity information (Screen 8) represents a significant jump in commitment and cognitive load."
+      },
+      {
+        "category": "Consistency",
+        "severity": "Medium",
+        "screen_numbers": [
+          11,
+          13
+        ],
+        "position": {
+          "screen_number": 13,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The flow concludes with an SMS verification step (Screen 13) without clear prior indication or context regarding the next steps or the final outcome of the application after successful verification."
+      },
+      {
+        "category": "Consistency",
+        "severity": "High",
+        "screen_numbers": [
+          8,
+          10,
+          11,
+          12,
+          13
+        ],
+        "position": {
+          "screen_number": 11,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "There are no visible error states or specific inline validation messages shown for incorrect or incomplete inputs in the application form fields across Screens 8-12, potentially leaving users unsure how to correct mistakes."
+      },
+      {
+        "category": "Consistency",
+        "severity": "High",
+        "screen_numbers": [
+          13
+        ],
+        "position": {
+          "screen_number": 13,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The application flow lacks a clear confirmation or 'thank you' screen after the final SMS verification step on Screen 13, failing to acknowledge successful submission and next steps."
+      },
+      {
+        "category": "Consistency",
+        "severity": "Medium",
+        "screen_numbers": [
+          8,
+          10,
+          11,
+          12,
+          13
+        ],
+        "position": {
+          "screen_number": 10,
+          "x": 5.0,
+          "y": 15.0
+        },
+        "finding": "The multi-step application form (Screens 8-13) does not include an explicit 'Back' button for users to easily return to and edit previous steps within the form."
+      },
+      {
+        "category": "Consistency",
+        "severity": "Medium",
+        "screen_numbers": [
+          7
+        ],
+        "position": {
+          "screen_number": 7,
+          "x": 80.0,
+          "y": 25.0
+        },
+        "finding": "Screen 7, which provides details for a specific credit card ('Crystal'), lacks a prominent primary call-to-action button to directly start the application for that card, relying instead on a general sticky CTA on the right side."
+      },
+      {
+        "category": "Consistency",
+        "severity": "High",
+        "screen_numbers": [
+          6,
+          8,
+          10,
+          11,
+          12,
+          13
+        ],
+        "position": {
+          "screen_number": 6,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "There are no visible focus indicators on interactive elements throughout the journey, particularly noticeable on the card selection buttons (Screen 6) and form fields (Screens 8, 10-13), which impedes keyboard navigation."
+      }
+    ],
+    "journey_metrics": {
+      "total_steps": 13,
+      "benchmark_steps": 7,
+      "benchmark_comparison": "above"
+    }
+  },
+  "contextual": {
+    "findings": [
+      {
+        "category": "Landing Relevance",
+        "severity": "Medium",
+        "screen_numbers": [
+          1,
+          2
+        ],
+        "position": {
+          "screen_number": 1,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The initial screens (1-2) present a generic Yap\u0131 Kredi bank homepage rather than a direct landing page for 'Kredi Kart\u0131 Ba\u015fvuru,' requiring users to navigate multiple steps to begin their application."
+      },
+      {
+        "category": "Goal Alignment",
+        "severity": "Medium",
+        "screen_numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "position": {
+          "screen_number": 3,
+          "x": 75.0,
+          "y": 30.0
+        },
+        "finding": "The journey from the Yap\u0131 Kredi homepage to the 'Kredi Kart\u0131 Ba\u015fvuru' form involves several navigation steps through general bank and card overview pages, potentially prolonging the path for a user with a clear application goal."
+      },
+      {
+        "category": "Goal Alignment",
+        "severity": "Low",
+        "screen_numbers": [
+          8,
+          9
+        ],
+        "position": {
+          "screen_number": 9,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "Extensive marketing content about 'Yap\u0131 Kredi World D\u00fcnyas\u0131 Ayr\u0131cal\u0131klar\u0131' (Screen 9) is displayed within the 'Kredi Kart\u0131 Ba\u015fvuru' form, which may distract users from completing their application."
+      },
+      {
+        "category": "Mobile Risk",
+        "severity": "High",
+        "screen_numbers": [
+          13
+        ],
+        "position": {
+          "screen_number": 13,
+          "x": 50.0,
+          "y": 50.0
+        },
+        "finding": "The 'Kredi Kart\u0131 Ba\u015fvuru' flow requires an SMS OTP verification on Screen 13 with a visible timer, posing a high risk of interruption and potential loss of context for users on mobile devices who may need to switch apps."
+      },
+      {
+        "category": "Contextual",
+        "severity": "Low",
+        "screen_numbers": [
+          12
+        ],
+        "position": {
+          "screen_number": 12,
+          "x": 25.0,
+          "y": 65.0
+        },
+        "finding": "The inclusion of a consent checkbox on Screen 12, allowing Yap\u0131 Kredi to contact the user if their application is interrupted, is a good practice for customer support and trust in a financial application."
+      },
+      {
+        "category": "Contextual",
+        "severity": "Low",
+        "screen_numbers": [
+          11
+        ],
+        "position": {
+          "screen_number": 11,
+          "x": 50.0,
+          "y": 85.0
+        },
+        "finding": "The presence of detailed information regarding KVKK (Turkish Personal Data Protection Law) on Screen 11 appropriately addresses regulatory requirements for a financial service application by Yap\u0131 Kredi."
+      }
+    ]
+  },
+  "flow_metadata": {
+    "flow_name": "Kredi Kart\u0131 Ba\u015fvuru",
+    "client": "Yap\u0131 Kredi",
+    "platform": "Web",
+    "target_user": "",
+    "user_goal": ""
+  }
+}

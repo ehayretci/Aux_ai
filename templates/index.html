@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>UX Analyser — Flow Archive</title>
+  <link rel="stylesheet" href="/static/index.css" />
+</head>
+<body>
+  <header>
+    <div class="head-text">
+      <h1>UX Flow Sessions</h1>
+      <p>A digital archive of every captured user flow.</p>
+    </div>
+    <div class="head-actions">
+      <button id="delete-mode-btn">Delete</button>
+    </div>
+  </header>
+
+  <section class="filters">
+    <input id="filter-search" type="text" placeholder="Search by name, client, goal…" />
+    <select id="filter-platform">
+      <option value="">All Platforms</option>
+      <option>Web</option><option>iOS</option><option>Android</option>
+    </select>
+    <select id="filter-client">
+      <option value="">All Clients</option>
+      <!-- options populated dynamically from localStorage + sessions -->
+    </select>
+  </section>
+
+  <main>
+    <ul id="sessions"></ul>
+  </main>
+
+  <!-- =========================================================
+       Edit-flow modal (opened by pencil icon on each card)
+       ========================================================= -->
+  <div id="edit-modal" class="edit-modal hidden" aria-hidden="true">
+    <div class="edit-backdrop" data-edit-close></div>
+    <div class="edit-shell">
+      <header class="edit-head">
+        <h2>Edit Flow</h2>
+        <button class="edit-close" id="edit-close" title="Close" aria-label="Close">×</button>
+      </header>
+      <form id="edit-form" class="edit-form">
+        <input type="hidden" name="session_id" />
+        <label>Flow Name <span class="req">*</span>
+          <input type="text" name="flow_name" required />
+        </label>
+        <label>Client
+          <input type="text" name="client" />
+        </label>
+        <label>Platform
+          <select name="platform">
+            <option value="">—</option>
+            <option>Web</option><option>iOS</option><option>Android</option>
+          </select>
+        </label>
+        <label>Target User
+          <input type="text" name="target_user" />
+        </label>
+        <label>User Goal
+          <input type="text" name="user_goal" />
+        </label>
+        <div class="edit-actions">
+          <button type="button" class="btn ghost" id="edit-cancel">Cancel</button>
+          <button type="submit" class="btn primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const CLIENTS_KEY = 'ux-known-clients';
+
+    const list = document.getElementById('sessions');
+    const filterSearch = document.getElementById('filter-search');
+    const filterPlatform = document.getElementById('filter-platform');
+    const filterClient = document.getElementById('filter-client');
+    const deleteBtn = document.getElementById('delete-mode-btn');
+
+    const editModal = document.getElementById('edit-modal');
+    const editForm = document.getElementById('edit-form');
+    const editCloseBtn = document.getElementById('edit-close');
+    const editCancelBtn = document.getElementById('edit-cancel');
+
+    let sessions = [];
+    let deleteMode = false;
+
+    deleteBtn.addEventListener('click', () => {
+      deleteMode = !deleteMode;
+      deleteBtn.textContent = deleteMode ? 'Done' : 'Delete';
+      deleteBtn.classList.toggle('active', deleteMode);
+      document.body.classList.toggle('delete-mode', deleteMode);
+    });
+
+    [filterSearch, filterPlatform, filterClient].forEach((el) => {
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+      }[c]));
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('/api/sessions');
+        const data = await res.json();
+        sessions = data.sessions || [];
+      } catch (e) {
+        sessions = [];
+      }
+      refreshClientFilterOptions();
+      render();
+    }
+
+    /** Build the unique set of client names — union of:
+     *  - clients used by any saved session
+     *  - clients remembered in localStorage by the extension popup
+     */
+    function knownClients() {
+      const set = new Set();
+      for (const s of sessions) {
+        const c = (s.client || s.sector || '').trim();
+        if (c) set.add(c);
+      }
+      try {
+        const stored = JSON.parse(localStorage.getItem(CLIENTS_KEY) || '[]');
+        for (const c of stored) {
+          const v = (c || '').trim();
+          if (v) set.add(v);
+        }
+      } catch (_) {}
+      return Array.from(set).sort((a, b) => a.localeCompare(b));
+    }
+
+    function refreshClientFilterOptions() {
+      const current = filterClient.value;
+      const all = knownClients();
+      filterClient.innerHTML = '<option value="">All Clients</option>';
+      for (const c of all) {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        filterClient.appendChild(opt);
+      }
+      // Preserve current selection if it's still valid.
+      if (all.includes(current)) filterClient.value = current;
+    }
+
+    function render() {
+      const q = filterSearch.value.trim().toLowerCase();
+      const platform = filterPlatform.value;
+      const client = filterClient.value;
+
+      const filtered = sessions.filter((s) => {
+        if (platform && s.platform !== platform) return false;
+        const sClient = (s.client || s.sector || '').trim();
+        if (client && sClient !== client) return false;
+        if (q) {
+          const hay = [s.name, s.id, s.client, s.sector, s.platform, s.target_user, s.user_goal]
+            .filter(Boolean).join(' ').toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      list.innerHTML = '';
+      if (!filtered.length) {
+        list.innerHTML = '<li class="empty">No flows match your filters. Use the Chrome extension to start one.</li>';
+        return;
+      }
+
+      for (const s of filtered) {
+        const li = document.createElement('li');
+        li.className = 'flow-card';
+        if (s.is_recording) li.classList.add('recording');
+        li.dataset.session = s.id;
+        const clientTag = s.client || s.sector;
+        li.innerHTML = `
+          <a class="flow-link" href="/canvas/${encodeURIComponent(s.id)}">
+            <div class="flow-name">${escapeHtml(s.name || s.id)}</div>
+            <div class="flow-tags">
+              ${clientTag ? `<span class="tag">${escapeHtml(clientTag)}</span>` : ''}
+              ${s.platform ? `<span class="tag">${escapeHtml(s.platform)}</span>` : ''}
+            </div>
+            <div class="flow-meta">
+              <span>${s.screen_count || 0} screen${(s.screen_count || 0) === 1 ? '' : 's'}</span>
+            </div>
+          </a>
+          <button class="edit-btn" title="Edit details" aria-label="Edit details">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </button>
+          <button class="delete-btn" title="Delete this flow">×</button>
+        `;
+        li.querySelector('.edit-btn').addEventListener('click', (e) => {
+          e.preventDefault(); e.stopPropagation();
+          openEdit(s);
+        });
+        li.querySelector('.delete-btn').addEventListener('click', async (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (!confirm(`Delete flow "${s.name || s.id}"?`)) return;
+          await fetch(`/api/session/${encodeURIComponent(s.id)}`, { method: 'DELETE' });
+          load();
+        });
+        list.appendChild(li);
+      }
+    }
+
+    function openEdit(s) {
+      editForm.session_id.value = s.id;
+      editForm.flow_name.value = s.name || s.id || '';
+      editForm.client.value = s.client || s.sector || '';
+      editForm.platform.value = s.platform || '';
+      editForm.target_user.value = s.target_user || '';
+      editForm.user_goal.value = s.user_goal || '';
+      editModal.classList.remove('hidden');
+      editModal.setAttribute('aria-hidden', 'false');
+    }
+    function closeEdit() {
+      editModal.classList.add('hidden');
+      editModal.setAttribute('aria-hidden', 'true');
+    }
+    editCloseBtn.addEventListener('click', closeEdit);
+    editCancelBtn.addEventListener('click', closeEdit);
+    editModal.addEventListener('click', (e) => {
+      if (e.target?.dataset?.editClose !== undefined) closeEdit();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!editModal.classList.contains('hidden') && e.key === 'Escape') closeEdit();
+    });
+
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(editForm);
+      const sessionId = fd.get('session_id');
+      const meta = {
+        flow_name: (fd.get('flow_name') || '').trim(),
+        client: (fd.get('client') || '').trim(),
+        platform: (fd.get('platform') || '').trim(),
+        target_user: (fd.get('target_user') || '').trim(),
+        user_goal: (fd.get('user_goal') || '').trim(),
+      };
+      try {
+        await fetch(`/api/session/${encodeURIComponent(sessionId)}/flow_metadata`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(meta),
+        });
+      } catch (_) {}
+      // Remember client so the filter grows with new entries.
+      if (meta.client) {
+        try {
+          const stored = JSON.parse(localStorage.getItem(CLIENTS_KEY) || '[]');
+          if (!stored.includes(meta.client)) {
+            stored.push(meta.client);
+            localStorage.setItem(CLIENTS_KEY, JSON.stringify(stored));
+          }
+        } catch (_) {}
+      }
+      closeEdit();
+      load();
+    });
+
+    load();
+    setInterval(load, 4000);
+  </script>
+</body>
+</html>
