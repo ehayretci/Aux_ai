@@ -2,13 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>UX Flow Canvas</title>
+  <title>AUX — Flow Canvas</title>
+  <link rel="icon" type="image/svg+xml" href="/static/logos/site.svg" />
   <link rel="stylesheet" href="/static/canvas.css" />
+  <script src="/static/theme.js"></script>
 </head>
 <body>
   <div id="topbar">
     <div class="left">
       <a href="/" class="back" title="Back to sessions">←</a>
+      <img class="brand-logo brand-logo-mark"
+           src="/static/logos/3.svg"
+           data-logo-dark="/static/logos/3.svg"
+           data-logo-light="/static/logos/site.svg"
+           alt="AUX" />
       <div class="title-block">
         <span class="session-name" id="session-name" title="Click to rename">—</span>
         <span class="status-dot" id="status-dot" data-recording="false" aria-hidden="true"></span>
@@ -57,6 +64,15 @@
     </button>
     <button class="cc-btn" id="reset-btn" title="Reset view">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    </button>
+    <span class="cc-divider"></span>
+    <button class="cc-btn" data-theme-toggle title="Toggle theme" aria-label="Toggle theme">
+      <span class="theme-ico theme-ico-moon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </span>
+      <span class="theme-ico theme-ico-sun" aria-hidden="true" style="display:none;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </span>
     </button>
   </div>
 

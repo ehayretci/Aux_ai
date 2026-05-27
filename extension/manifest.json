@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "UX Flow Capturer",
+  "name": "AUX",
   "version": "2.0",
   "description": "Capture user flows step-by-step as state-based UI flow maps",
   "permissions": [
@@ -15,9 +15,21 @@
   "background": {
     "service_worker": "background.js"
   },
+  "icons": {
+    "16":  "site.svg",
+    "32":  "site.svg",
+    "48":  "site.svg",
+    "128": "site.svg"
+  },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "UX Flow Capturer"
+    "default_title": "AUX",
+    "default_icon": {
+      "16":  "site.svg",
+      "32":  "site.svg",
+      "48":  "site.svg",
+      "128": "site.svg"
+    }
   },
   "content_scripts": [
     {

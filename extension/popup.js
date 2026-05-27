@@ -38,7 +38,20 @@ let isEditingDuringRecording = false;
 let counterTimer = null;
 
 // ----- Boot -----
+async function applyThemeFromServer() {
+  let theme = 'dark';
+  try {
+    const r = await fetch(`${SERVER}/api/theme`, { cache: 'no-store' });
+    if (r.ok) theme = (await r.json()).theme || 'dark';
+  } catch (_) {}
+  document.documentElement.dataset.theme = theme;
+  document.querySelectorAll('img[data-logo-dark][data-logo-light]').forEach((img) => {
+    img.src = theme === 'light' ? img.getAttribute('data-logo-light') : img.getAttribute('data-logo-dark');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  applyThemeFromServer();
   refreshClientDatalist();
   checkServerHealth();
   await routeBasedOnRecordingState();

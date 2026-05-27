@@ -151,3 +151,6 @@ Thumbs.db
 screenshots/
 report.html
 
+
+# Runtime UI theme state
+.aux_theme

@@ -22,6 +22,7 @@ import base64
 import shutil
 import asyncio
 import uuid
+from pathlib import Path
 from typing import Optional, List, Dict, AsyncGenerator
 
 from fastapi import FastAPI, Request, HTTPException
@@ -172,6 +173,36 @@ app.add_middleware(
 # Static + screenshots are served under fixed prefixes.
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/screenshots", StaticFiles(directory=SCREENSHOTS_DIR), name="screenshots")
+
+# Brand assets (logos) live in Contents/ alongside the project.
+_CONTENTS_DIR = Path(__file__).resolve().parent / "Contents"
+if _CONTENTS_DIR.is_dir():
+    app.mount("/contents", StaticFiles(directory=str(_CONTENTS_DIR)), name="contents")
+
+# Theme is shared across pages + the Chrome extension popup. Persist to disk
+# so it survives server restarts.
+_THEME_FILE = Path(__file__).resolve().parent / ".aux_theme"
+
+def _read_theme() -> str:
+    try:
+        v = _THEME_FILE.read_text().strip().lower()
+        return "light" if v == "light" else "dark"
+    except Exception:
+        return "dark"
+
+@app.get("/api/theme")
+def get_theme():
+    return {"theme": _read_theme()}
+
+@app.post("/api/theme")
+async def set_theme(req: Request):
+    body = await req.json()
+    theme = "light" if str(body.get("theme", "")).lower() == "light" else "dark"
+    try:
+        _THEME_FILE.write_text(theme)
+    except Exception:
+        pass
+    return {"theme": theme}
 
 
 # --------------------------------------------------------------- pydantic --

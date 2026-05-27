@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "Flask Server",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["server.py"],
-      "port": 5000
+      "runtimeExecutable": "/Users/erimhayretci/Desktop/AI for UX/Aux_ai/venv/bin/python",
+      "runtimeArgs": ["-m", "uvicorn", "server:app", "--port", "8000"],
+      "port": 8000
     }
   ]
 }

@@ -2,17 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>UX Analyser — Flow Archive</title>
+  <title>AUX — Flow Archive</title>
+  <link rel="icon" type="image/svg+xml" href="/static/logos/site.svg" />
   <link rel="stylesheet" href="/static/index.css" />
+  <script src="/static/theme.js"></script>
 </head>
 <body>
   <header>
     <div class="head-text">
-      <h1>UX Flow Sessions</h1>
+      <img class="brand-logo brand-logo-text"
+           src="/static/logos/2.svg"
+           data-logo-dark="/static/logos/2.svg"
+           data-logo-light="/static/logos/1.svg"
+           alt="AUX" />
       <p>A digital archive of every captured user flow.</p>
     </div>
     <div class="head-actions">
-      <button id="delete-mode-btn">Delete</button>
+      <button id="theme-toggle-btn" class="icon-action" data-theme-toggle title="Toggle theme" aria-label="Toggle theme">
+        <span class="theme-ico theme-ico-moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+        <span class="theme-ico theme-ico-sun" aria-hidden="true" style="display:none;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </span>
+      </button>
+      <button id="delete-mode-btn" class="icon-action" title="Delete flows" aria-label="Delete flows">
+        <svg class="trash-ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+      </button>
     </div>
   </header>
 
@@ -89,7 +105,8 @@
 
     deleteBtn.addEventListener('click', () => {
       deleteMode = !deleteMode;
-      deleteBtn.textContent = deleteMode ? 'Done' : 'Delete';
+      deleteBtn.title = deleteMode ? 'Done' : 'Delete flows';
+      deleteBtn.setAttribute('aria-label', deleteBtn.title);
       deleteBtn.classList.toggle('active', deleteMode);
       document.body.classList.toggle('delete-mode', deleteMode);
     });
