@@ -171,7 +171,20 @@ app.add_middleware(
 )
 
 # Static + screenshots are served under fixed prefixes.
-app.mount("/static", StaticFiles(directory="static"), name="static")
+class NoCacheStaticFiles(StaticFiles):
+    """Force browsers to revalidate static assets every request.
+
+    StaticFiles sends ETag/Last-Modified but no Cache-Control, so browsers
+    apply heuristic caching and can serve a stale CSS/JS without revalidating.
+    Setting no-cache forces an ETag revalidation each request (cheap 304s),
+    so an updated stylesheet is never served from a stale cache.
+    """
+    async def get_response(self, *args, **kwargs):
+        resp = await super().get_response(*args, **kwargs)
+        resp.headers["Cache-Control"] = "no-cache, must-revalidate"
+        return resp
+
+app.mount("/static", NoCacheStaticFiles(directory="static"), name="static")
 app.mount("/screenshots", StaticFiles(directory=SCREENSHOTS_DIR), name="screenshots")
 
 # Brand assets (logos) live in Contents/ alongside the project.

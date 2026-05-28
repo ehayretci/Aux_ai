@@ -122,30 +122,21 @@ header {
 .search-wrap {
   flex: 1;
   max-width: 360px;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0 12px;
+  position: relative;
 }
 .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--text-dim);
   pointer-events: none;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
 }
 .search-wrap #filter-search {
-  flex: 1;
-  background: transparent !important;
-  border: none !important;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px 8px 30px;
   outline: none;
-  padding: 8px 0 8px 8px;
-  color: var(--text);
-  font-size: 13px;
-  font-family: inherit;
 }
 .filters input::placeholder { color: var(--text-dim); }
 
