@@ -39,11 +39,44 @@ let flowAnalysisResult = null;
 
 sessionNameEl.textContent = SESSION_ID || "(no session selected)";
 
+const GRID_SPACING = 32; // world-unit spacing of the finest dot grid
+
+// Low-contrast dots; the finer layer fades in/out between zoom levels so the
+// on-screen density stays roughly constant (FigJam-style level-of-detail).
+function gridDotStyle() {
+  const light = document.documentElement.dataset.theme === "light";
+  return { rgb: light ? "0,0,0" : "255,255,255", maxAlpha: light ? 0.10 : 0.14 };
+}
+
+function updateGrid() {
+  const { rgb, maxAlpha } = gridDotStyle();
+  // How many power-of-two subdivisions from the base spacing the current zoom
+  // sits at. Fractional part drives the cross-fade between adjacent levels.
+  const level = Math.floor(-Math.log2(view.scale));
+  const frac = -Math.log2(view.scale) - level;
+  const fine = GRID_SPACING * view.scale * Math.pow(2, level); // ~16–32px on screen
+  const coarse = fine * 2;                                     // ~32–64px, always shown
+  const fineA = (maxAlpha * (1 - frac)).toFixed(3);
+  const coarseA = maxAlpha.toFixed(3);
+  viewport.style.backgroundImage =
+    `radial-gradient(circle, rgba(${rgb},${fineA}) 1px, transparent 1px),` +
+    `radial-gradient(circle, rgba(${rgb},${coarseA}) 1px, transparent 1px)`;
+  viewport.style.backgroundSize = `${fine}px ${fine}px, ${coarse}px ${coarse}px`;
+  viewport.style.backgroundPosition =
+    `${view.x}px ${view.y}px, ${view.x}px ${view.y}px`;
+}
+
 function applyTransform() {
   world.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+  updateGrid();
   if (zoomLabelEl) zoomLabelEl.textContent = Math.round(view.scale * 100) + "%";
   drawConnections();
 }
+
+// Refresh grid colours when the (browser-independent) app theme toggles.
+document.querySelectorAll("[data-theme-toggle]").forEach((btn) =>
+  btn.addEventListener("click", () => requestAnimationFrame(updateGrid))
+);
 applyTransform();
 
 // ------------------------------------------------------- Pan & zoom -------

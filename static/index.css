@@ -12,6 +12,8 @@
   --text-dim: #8a8d94;
   --accent: #2249D6;
   --accent-hover: #1a3aae;
+  --danger: #E5484D;
+  --danger-hover: #c93a3f;
   --on-accent: #FFFFFF;
   --chip-bg: rgba(40, 40, 40, 0.7);
   --overlay-bg: rgba(0, 0, 0, 0.6);
@@ -31,6 +33,8 @@
   --text-dim: #666666;
   --accent: #2249D6;
   --accent-hover: #1a3aae;
+  --danger: #E5484D;
+  --danger-hover: #c93a3f;
   --on-accent: #FFFFFF;
   --chip-bg: rgba(243, 243, 243, 0.8);
   --overlay-bg: rgba(0, 0, 0, 0.35);
@@ -258,7 +262,7 @@ li.flow-card:hover .edit-btn { opacity: 1; }
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--danger);
   color: white;
   border: none;
   font-size: 18px;
@@ -270,13 +274,13 @@ li.flow-card:hover .edit-btn { opacity: 1; }
   justify-content: center;
   padding: 0;
   z-index: 5;
-  box-shadow: 0 2px 8px rgba(34, 73, 214, 0.4);
+  box-shadow: 0 2px 8px rgba(229, 72, 77, 0.4);
 }
-.delete-btn:hover { transform: scale(1.1); }
+.delete-btn:hover { transform: scale(1.1); background: var(--danger-hover); }
 body.delete-mode .delete-btn { display: flex; }
 body.delete-mode li.flow-card .edit-btn { display: none; }
-body.delete-mode li.flow-card { border-color: rgba(34, 73, 214, 0.35); }
-body.delete-mode li.flow-card:hover { border-color: var(--accent); }
+body.delete-mode li.flow-card { border-color: rgba(229, 72, 77, 0.35); }
+body.delete-mode li.flow-card:hover { border-color: var(--danger); }
 
 /* ====================================================================
    Edit modal
@@ -345,7 +349,7 @@ body.delete-mode li.flow-card:hover { border-color: var(--accent); }
   letter-spacing: 0.04em;
   font-weight: 600;
 }
-.edit-form .req { color: var(--accent); }
+.edit-form .req { color: var(--danger); }
 .edit-form input,
 .edit-form select {
   background: var(--surface);

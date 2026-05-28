@@ -14,6 +14,7 @@
   --accent-hover: #1a3aae;
   --on-accent: #FFFFFF;
   --grid-dot: #3a3a3a;
+  --canvas-bg: #0A0D0F;
   --topbar-bg: rgba(40, 40, 40, 0.92);
   --pill-bg: rgba(40, 40, 40, 0.92);
   --chip-bg: rgba(40, 40, 40, 0.7);
@@ -40,6 +41,7 @@
   --accent-hover: #1a3aae;
   --on-accent: #FFFFFF;
   --grid-dot: #e3e3e3;
+  --canvas-bg: #FFFFFF;
   --topbar-bg: rgba(255, 255, 255, 0.92);
   --pill-bg: rgba(255, 255, 255, 0.95);
   --chip-bg: rgba(255, 255, 255, 0.85);
@@ -176,16 +178,15 @@ button:hover { background: var(--surface-3); }
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 0.01em;
-  box-shadow: 0 4px 14px rgba(34, 73, 214, 0.35);
-  transition: transform 0.12s, box-shadow 0.15s, background 0.15s, border-color 0.15s, color 0.15s;
+  box-shadow: none;
+  transition: transform 0.12s, background 0.15s, border-color 0.15s, color 0.15s;
 }
 .flow-btn:hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
-  box-shadow: 0 6px 18px rgba(34, 73, 214, 0.45);
   transform: translateY(-1px);
 }
-.flow-btn .flow-btn-icon { color: currentColor; }
+.flow-btn .flow-btn-icon { color: currentColor; width: 18px; height: 18px; }
 
 /* Post-analysis state — subtle green outline + "Flow Analysis" label */
 .flow-btn.has-result {
@@ -207,9 +208,9 @@ button:hover { background: var(--surface-3); }
   top: 64px; left: 0; right: 0; bottom: 0;
   overflow: hidden;
   cursor: grab;
-  background:
-    radial-gradient(circle, var(--grid-dot) 1px, transparent 1px) 0 0 / 32px 32px,
-    var(--bg);
+  /* Dot-grid background-image/size/position are driven by applyTransform()
+     in canvas.js so the grid pans, zooms, and fades with the world. */
+  background-color: var(--canvas-bg);
 }
 #viewport.panning { cursor: grabbing; }
 
@@ -299,15 +300,15 @@ button:hover { background: var(--surface-3); }
   z-index: 5;
 }
 .screen.analyzed {
-  border-color: rgba(52, 199, 89, 0.7);
-  box-shadow: 0 0 0 1px rgba(52, 199, 89, 0.4),
-              0 0 24px rgba(52, 199, 89, 0.25);
+  border-color: rgba(34, 73, 214, 0.7);
+  box-shadow: 0 0 0 1px rgba(34, 73, 214, 0.4),
+              0 0 24px rgba(34, 73, 214, 0.25);
   cursor: pointer;
 }
 .screen.analyzed:hover {
-  border-color: #34c759;
-  box-shadow: 0 0 0 1px rgba(52, 199, 89, 0.6),
-              0 0 32px rgba(52, 199, 89, 0.4);
+  border-color: #2249D6;
+  box-shadow: 0 0 0 1px rgba(34, 73, 214, 0.6),
+              0 0 32px rgba(34, 73, 214, 0.4);
 }
 
 /* Image wrapper — the click marker is positioned inside this so it
