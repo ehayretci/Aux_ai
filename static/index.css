@@ -116,7 +116,37 @@ header {
   color: var(--text);
   font-size: 13px;
 }
-.filters input { flex: 1; max-width: 360px; }
+.filters select {
+  color: #868991;
+}
+.search-wrap {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 12px;
+}
+.search-icon {
+  color: var(--text-dim);
+  pointer-events: none;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.search-wrap #filter-search {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  outline: none;
+  padding: 8px 0 8px 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+}
 .filters input::placeholder { color: var(--text-dim); }
 
 main { padding: 24px 48px 48px; }
@@ -191,6 +221,16 @@ li.flow-card.recording::after {
   padding: 3px 10px;
   font-size: 11px;
   color: var(--text-soft);
+}
+.tag-platform {
+  padding: 4px 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tag-platform .platform-icon {
+  display: block;
+  color: var(--text-muted);
 }
 .flow-meta {
   font-size: 12px;

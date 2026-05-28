@@ -32,10 +32,13 @@
   </header>
 
   <section class="filters">
-    <input id="filter-search" type="text" placeholder="Search by name, client, goal…" />
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="filter-search" type="text" placeholder="Search user flows…" />
+    </div>
     <select id="filter-platform">
       <option value="">All Platforms</option>
-      <option>Web</option><option>iOS</option><option>Android</option>
+      <option>Web</option><option>Mobile</option>
     </select>
     <select id="filter-client">
       <option value="">All Clients</option>
@@ -68,7 +71,7 @@
         <label>Platform
           <select name="platform">
             <option value="">—</option>
-            <option>Web</option><option>iOS</option><option>Android</option>
+            <option>Web</option><option>Mobile</option>
           </select>
         </label>
         <label>Target User
@@ -98,6 +101,27 @@
     const editForm = document.getElementById('edit-form');
     const editCloseBtn = document.getElementById('edit-close');
     const editCancelBtn = document.getElementById('edit-cancel');
+
+    function normalizePlatform(p) {
+      if (!p) return '';
+      const l = p.toLowerCase();
+      if (l === 'ios' || l === 'android') return 'Mobile';
+      return p.charAt(0).toUpperCase() + p.slice(1);
+    }
+    const MOBILE_ICON = `<svg class="platform-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Mobile"><rect x="6" y="1" width="12" height="22" rx="3"/><circle cx="12" cy="18.5" r="1" fill="currentColor" stroke="none"/></svg>`;
+    const PLATFORM_ICONS = {
+      web:    `<svg class="platform-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Web"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg>`,
+      mobile: MOBILE_ICON,
+      ios:    MOBILE_ICON,
+      android: MOBILE_ICON,
+    };
+    function platformTag(platform) {
+      if (!platform) return '';
+      const normalised = normalizePlatform(platform);
+      const icon = PLATFORM_ICONS[normalised.toLowerCase()];
+      if (icon) return `<span class="tag tag-platform" title="${escapeHtml(normalised)}">${icon}</span>`;
+      return `<span class="tag">${escapeHtml(normalised)}</span>`;
+    }
 
     let sessions = [];
     let deleteMode = false;
@@ -173,7 +197,7 @@
       const client = filterClient.value;
 
       const filtered = sessions.filter((s) => {
-        if (platform && s.platform !== platform) return false;
+        if (platform && normalizePlatform(s.platform) !== platform) return false;
         const sClient = (s.client || s.sector || '').trim();
         if (client && sClient !== client) return false;
         if (q) {
@@ -201,7 +225,7 @@
             <div class="flow-name">${escapeHtml(s.name || s.id)}</div>
             <div class="flow-tags">
               ${clientTag ? `<span class="tag">${escapeHtml(clientTag)}</span>` : ''}
-              ${s.platform ? `<span class="tag">${escapeHtml(s.platform)}</span>` : ''}
+              ${platformTag(s.platform)}
             </div>
             <div class="flow-meta">
               <span>${s.screen_count || 0} screen${(s.screen_count || 0) === 1 ? '' : 's'}</span>
