@@ -156,7 +156,6 @@ async def evaluate_async(
         "overall_score": verdict.get("overall_score"),
         "score_rationale": verdict.get("score_rationale", ""),
         "critical_issues_count": verdict.get("critical_issues_count", 0),
-        "top_priority_finding": verdict.get("top_priority_finding", ""),
         "findings": curated,
         "orchestrator": {
             "screen_type": screen_type,

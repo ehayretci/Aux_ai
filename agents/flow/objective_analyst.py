@@ -191,7 +191,6 @@ def run(
                 "state_name": (screens[i] or {}).get("state_name"),
                 "overall_score": ev.get("overall_score"),
                 "score_rationale": ev.get("score_rationale"),
-                "top_priority_finding": ev.get("top_priority_finding"),
                 "findings": (ev.get("findings") or [])[:6],
             })
         parts.append("PER-SCREEN SPECIALIST FINDINGS:\n" + json.dumps(compact, indent=2))

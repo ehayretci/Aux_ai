@@ -92,11 +92,11 @@ header {
 .icon-action[data-theme-toggle] svg { transition: transform 0.4s ease; }
 .icon-action[data-theme-toggle]:hover svg { transform: rotate(20deg); }
 #delete-mode-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
 }
-#delete-mode-btn.active:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+#delete-mode-btn.active:hover { background: var(--danger-hover); border-color: var(--danger-hover); }
 
 .brand-logo-text {
   display: block;
@@ -122,6 +122,13 @@ header {
 }
 .filters select {
   color: #868991;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23868991' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  padding-right: 27px;
 }
 .search-wrap {
   flex: 1;
@@ -139,9 +146,25 @@ header {
 .search-wrap #filter-search {
   width: 100%;
   box-sizing: border-box;
-  padding: 8px 12px 8px 30px;
+  padding: 8px 32px 8px 30px;
   outline: none;
 }
+.search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.search-clear:hover { color: var(--text); }
+.search-clear[hidden] { display: none; }
 .filters input::placeholder { color: var(--text-dim); }
 
 main { padding: 24px 48px 48px; }
@@ -174,17 +197,16 @@ li.flow-card {
 }
 li.flow-card:hover { border-color: var(--accent); transform: translateY(-1px); }
 li.flow-card.recording {
-  border-color: rgba(34, 73, 214, 0.7);
-  box-shadow: 0 0 0 1px rgba(34, 73, 214, 0.4);
+  border-color: rgba(255, 59, 48, 0.7);
+  box-shadow: 0 0 0 1px rgba(255, 59, 48, 0.4);
 }
-li.flow-card.recording::after {
-  content: "● Recording";
-  position: absolute;
-  top: 12px; right: 12px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.05em;
+li.flow-card.recording .flow-name::after {
+  content: "●";
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 12.5px;
+  color: #ff3b30;
+  vertical-align: middle;
   animation: pulse 1.4s ease-in-out infinite;
 }
 @keyframes pulse {
@@ -370,7 +392,7 @@ body.delete-mode li.flow-card:hover { border-color: var(--danger); }
 }
 .edit-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
   margin-top: 6px;
 }

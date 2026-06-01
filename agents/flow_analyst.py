@@ -168,7 +168,6 @@ def run(
                 "overall_score": ev.get("overall_score"),
                 "score_rationale": ev.get("score_rationale"),
                 "critical_issues_count": ev.get("critical_issues_count"),
-                "top_priority_finding": ev.get("top_priority_finding"),
                 # Keep only first 8 findings per screen to stay bounded.
                 "findings": (ev.get("findings") or [])[:8],
             }

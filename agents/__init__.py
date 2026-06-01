@@ -14,8 +14,7 @@ Specialists (each returns a flat list of findings):
 - specialists.accessibility      — Accessibility & Technical Performance
 
 Synthesiser (sees the combined findings + the screen itself):
-- synthesiser — overall_score, score_rationale, critical_issues_count,
-                top_priority_finding
+- synthesiser — overall_score, score_rationale, critical_issues_count
 
 Why one lens per agent?
 A model asked to evaluate holistically tends to soften criticism and hedge

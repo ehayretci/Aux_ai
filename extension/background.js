@@ -30,64 +30,59 @@ const INTERACTION_THRESHOLD = 2;
 
 // ----- Toolbar icon (recording indicator) -----
 //
-// Replaces the old badge approach. Generates a 32x32 ImageData via
-// OffscreenCanvas at runtime: a dark rounded square with "UX" lettering,
-// plus a clean 12px red dot in the top-right corner WHEN recording.
-// No badge text, no badge box — just a dot.
+// Paints the AUX logo into a 32x32 ImageData via OffscreenCanvas, with a
+// clean 12px red dot in the top-right corner WHEN recording. The logo
+// variant follows the app theme: the white mark on dark theme, the
+// dark/blue mark on light theme — matching the popup.
 
-function _drawRoundedRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
+const ICON_LIGHT = 'extension_light.png'; // dark/blue mark — for light theme
+const ICON_DARK = 'extension_dark.png';   // white mark — for dark theme
+
+async function _appTheme() {
+  try {
+    const r = await fetch(`${SERVER}/api/theme`, { cache: 'no-store' });
+    if (r.ok) return (await r.json()).theme || 'dark';
+  } catch (_) {}
+  return 'dark';
 }
 
-function _generateIcon(recording) {
+async function _generateIcon(recording) {
   const size = 32;
   const canvas = new OffscreenCanvas(size, size);
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, size, size);
 
-  // Base: dark rounded square with red "UX" letters.
-  ctx.fillStyle = '#0e0f12';
-  _drawRoundedRect(ctx, 0, 0, size, size, 6);
-  ctx.fill();
-
-  ctx.fillStyle = '#ff3b30';
-  ctx.font = 'bold 14px -apple-system, "SF Pro Text", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('UX', size / 2, size / 2 + 1);
+  const theme = await _appTheme();
+  const logoFile = theme === 'light' ? ICON_LIGHT : ICON_DARK;
+  try {
+    const blob = await (await fetch(chrome.runtime.getURL(logoFile))).blob();
+    const bmp = await createImageBitmap(blob);
+    ctx.drawImage(bmp, 0, 0, size, size);
+  } catch (_) {}
 
   if (recording) {
-    // Clean 12px red dot, top-right. No border.
+    // Clean red dot, bottom-right. No border.
     ctx.fillStyle = '#ff3b30';
+    const r = 7.8;
     ctx.beginPath();
-    ctx.arc(size - 6, 6, 6, 0, Math.PI * 2);
+    ctx.arc(size - 5, size - 5, r, 0, Math.PI * 2);
     ctx.fill();
   }
 
   return ctx.getImageData(0, 0, size, size);
 }
 
-function setBadgeRecording(active) {
+async function setBadgeRecording(active) {
   try {
     // Defensively clear any legacy badge text from a prior install.
     chrome.action.setBadgeText({ text: '' });
-    const imageData = _generateIcon(!!active);
+    const imageData = await _generateIcon(!!active);
     chrome.action.setIcon({ imageData });
     chrome.action.setTitle({
-      title: active ? 'UX Flow Capturer — Recording' : 'UX Flow Capturer',
+      title: active ? 'AUX — Recording' : 'AUX',
     });
   } catch (e) {
-    console.warn('[UX BG] setIcon failed:', e);
+    console.warn('[AUX BG] setIcon failed:', e);
   }
 }
 

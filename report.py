@@ -38,9 +38,9 @@ CATEGORY_ORDER = [
 SEVERITY_ORDER = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
 
 SEVERITY_COLOURS = {
-    "Critical": "#ff3b30",   # red
-    "High":     "#ff9500",   # orange
-    "Medium":   "#ffcc00",   # yellow
+    "Critical": "#FF0000",   # red
+    "High":     "#FF6200",   # orange
+    "Medium":   "#FFB700",   # amber
     "Low":      "#0a84ff",   # blue
 }
 
@@ -124,7 +124,6 @@ def build_report(
     score_colour = _score_colour(score)
     rationale = result.get("score_rationale", "")
     critical_count = result.get("critical_issues_count", 0)
-    top_priority = result.get("top_priority_finding", "")
 
     # Pre-build sidebar HTML (server-rendered so it prints correctly even if JS off).
     cats_html_parts = []
@@ -248,25 +247,6 @@ def build_report(
     border: 1px solid #2a2d34;
     border-radius: 999px;
     padding: 4px 10px;
-  }}
-
-  .top-finding {{
-    margin: 16px 24px 0;
-    padding: 12px 14px;
-    background: #1a1c21;
-    border-left: 3px solid #ff3b30;
-    border-radius: 6px;
-    font-size: 12px;
-    color: #d4d6da;
-    line-height: 1.5;
-  }}
-  .top-finding-label {{
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #ff3b30;
-    margin-bottom: 4px;
-    font-weight: 700;
   }}
 
   .findings-scroll {{
@@ -565,7 +545,6 @@ def build_report(
     .canvas-pad {{ top: 4%; left: 4%; right: 4%; bottom: 4%; }}
     .sidebar-footer, .export-btn {{ display: none !important; }}
     details[open] > .cat-header::before {{ color: #111 !important; }}
-    .top-finding {{ background: #fff5f4 !important; color: #111 !important; }}
     .num-circle {{ box-shadow: none !important; }}
   }}
 </style>
@@ -586,7 +565,6 @@ def build_report(
           </div>
         </div>
         <div class="score-rationale">{html.escape(rationale)}</div>
-        {f'<div class="top-finding"><div class="top-finding-label">Top Priority</div>{html.escape(top_priority)}</div>' if top_priority else ''}
       </header>
 
       <div class="findings-scroll" id="findings-scroll">

@@ -17,6 +17,8 @@ const POLL_INTERVAL_MS = 1500;
 const SCREEN_WIDTH = 360;
 const SCREEN_GAP = 16;
 const FRAME_GAP = 120;
+// Zoom level at/above which touchpoints & arrows stop growing on screen.
+const OVERLAY_CAP_ZOOM = 0.5;
 
 const viewport = document.getElementById("viewport");
 const world = document.getElementById("world");
@@ -68,6 +70,9 @@ function updateGrid() {
 
 function applyTransform() {
   world.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+  // Touchpoints & arrows hold a constant on-screen size for zoom >= 50%,
+  // then shrink naturally with the content below 50%.
+  world.style.setProperty("--inv-scale", Math.min(1, OVERLAY_CAP_ZOOM / view.scale));
   updateGrid();
   if (zoomLabelEl) zoomLabelEl.textContent = Math.round(view.scale * 100) + "%";
   drawConnections();
@@ -127,10 +132,7 @@ function zoomBy(factor, anchorX, anchorY) {
 document.getElementById("fit-btn").addEventListener("click", fitToContent);
 document.getElementById("zoom-in-btn").addEventListener("click", () => zoomBy(1.2));
 document.getElementById("zoom-out-btn").addEventListener("click", () => zoomBy(1 / 1.2));
-document.getElementById("reset-btn").addEventListener("click", () => {
-  view = { x: 80, y: 80, scale: 0.6 };
-  applyTransform();
-});
+document.getElementById("reset-btn").addEventListener("click", resetLayout);
 
 const analyseFlowBtn = document.getElementById("analyse-flow-btn");
 if (analyseFlowBtn) analyseFlowBtn.addEventListener("click", onAnalyseFlowClick);
@@ -275,7 +277,7 @@ function renderIncremental(data) {
       }
       attachFrameDrag(frame, key);
     } else {
-      frame.urlEl.textContent = stateData.url || "";
+      setFrameUrl(frame.urlEl, stateData.url || "");
       const wantName = stateData.name || `State ${stateData.state}`;
       if (frame.titleEl && frame.titleEl.dataset.editing !== "1" && frame.stateName !== wantName) {
         frame.titleEl.textContent = wantName;
@@ -387,6 +389,28 @@ function autoScreenPosition(stateKey, screenData) {
   return { x: 0, y: maxBottom > 0 ? maxBottom + SCREEN_GAP : 0 };
 }
 
+function setFrameUrl(urlEl, url) {
+  urlEl.textContent = url || "";
+  if (url) {
+    urlEl.dataset.url = url;
+    urlEl.classList.add("clickable");
+    urlEl.title = "Open in new tab";
+    if (!urlEl.dataset.bound) {
+      urlEl.dataset.bound = "1";
+      urlEl.addEventListener("mousedown", (e) => e.stopPropagation());
+      urlEl.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const href = urlEl.dataset.url;
+        if (href) window.open(href, "_blank", "noopener,noreferrer");
+      });
+    }
+  } else {
+    delete urlEl.dataset.url;
+    urlEl.classList.remove("clickable");
+    urlEl.removeAttribute("title");
+  }
+}
+
 function createFrame(stateKey, stateData) {
   const el = document.createElement("div");
   el.className = "state-frame";
@@ -414,7 +438,7 @@ function createFrame(stateKey, stateData) {
   });
   const urlEl = document.createElement("span");
   urlEl.className = "frame-url";
-  urlEl.textContent = stateData.url || "";
+  setFrameUrl(urlEl, stateData.url || "");
   headerEl.appendChild(titleEl);
   headerEl.appendChild(urlEl);
 
@@ -464,7 +488,7 @@ function createScreen(s, stateKey) {
 
   const analyzeBtn = document.createElement("button");
   analyzeBtn.className = "analyze-btn";
-  analyzeBtn.textContent = "🔍";
+  analyzeBtn.innerHTML = `<img class="analyze-ico analyze-ico-light" src="/static/magnifier.png" alt="" aria-hidden="true" /><img class="analyze-ico analyze-ico-dark" src="/static/magnifier_dark.png" alt="" aria-hidden="true" />`;
   analyzeBtn.title = "Run UI analysis on this screen";
   analyzeBtn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -592,8 +616,13 @@ function layoutFrame(stateKey) {
     maxX = Math.max(maxX, sp.x + (meta.el.offsetWidth || SCREEN_WIDTH));
     maxY = Math.max(maxY, sp.y + (meta.el.offsetHeight || SCREEN_WIDTH * 0.6));
   }
-  frame.contentEl.style.width = Math.max(maxX, 280) + "px";
+  const contentWidth = Math.max(maxX, 280);
+  frame.contentEl.style.width = contentWidth + "px";
   frame.contentEl.style.height = Math.max(maxY, 80) + "px";
+  // Pin the frame width to the screens (content + 20px side margins + 2px
+  // borders) so a long URL in the header can't stretch the box; the URL
+  // truncates instead.
+  frame.el.style.width = (contentWidth + 44) + "px";
 }
 
 // -------------------------------------------------------- Drag handlers --
@@ -666,6 +695,37 @@ function attachScreenDrag(screenEl, path, stateKey) {
   });
 }
 
+// Discard all manual drag positions and rebuild the auto layout that was
+// generated at capture time, then persist so it survives reloads.
+function resetLayout() {
+  for (const k in framePositions) delete framePositions[k];
+  for (const p in screenPositions) delete screenPositions[p];
+
+  const screenOrder = (s) => ({
+    intro: 0,
+    interaction: 1, manual: 1, interaction_pre: 1, interaction_post: 1,
+    outro: 2,
+  }[s?.trigger] ?? 1);
+
+  const stateKeys = Object.keys(stateFrames).sort((a, b) => stateNum(a) - stateNum(b));
+  for (const key of stateKeys) {
+    const frame = stateFrames[key];
+    framePositions[key] = autoFramePosition(key);
+
+    const ordered = [...frame.screens].sort((a, b) => {
+      const da = screenEls[a]?.data, db = screenEls[b]?.data;
+      if (screenOrder(da) !== screenOrder(db)) return screenOrder(da) - screenOrder(db);
+      return (da?.index ?? 0) - (db?.index ?? 0);
+    });
+    for (const path of ordered) {
+      screenPositions[path] = autoScreenPosition(key, screenEls[path]?.data);
+    }
+    layoutFrame(key);
+  }
+  drawConnections();
+  persistLayout();
+}
+
 // ------------------------------------------- Layout persistence ----------
 function layoutKey() { return `ux-canvas-layout:${SESSION_ID}`; }
 
@@ -687,10 +747,23 @@ function restoreLayout() {
 }
 
 // ------------------------------------------- Connections (SVG overlay) --
+// Arrows hold a constant on-screen size for zoom >= cap, then shrink with
+// the content below it (mirrors the touchpoint --inv-scale behaviour).
+function arrowScaleFactor() {
+  return Math.min(1, view.scale / OVERLAY_CAP_ZOOM);
+}
+
 function drawConnections() {
   const defs = svg.querySelector("defs");
   while (svg.lastChild && svg.lastChild !== defs) {
     svg.removeChild(svg.lastChild);
+  }
+
+  const f = arrowScaleFactor();
+  const arrowMarker = defs && defs.querySelector("#arrow");
+  if (arrowMarker) {
+    arrowMarker.setAttribute("markerWidth", (6 * f).toFixed(3));
+    arrowMarker.setAttribute("markerHeight", (6 * f).toFixed(3));
   }
 
   const stateKeys = Object.keys(stateFrames).sort(
@@ -753,7 +826,7 @@ function drawArrow(start, end) {
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
   path.setAttribute("d", `M ${start.x} ${start.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${end.x} ${end.y}`);
   path.setAttribute("stroke", "#ff3b30");
-  path.setAttribute("stroke-width", "2.5");
+  path.setAttribute("stroke-width", (2.5 * arrowScaleFactor()).toFixed(3));
   path.setAttribute("fill", "none");
   path.setAttribute("marker-end", "url(#arrow)");
   path.setAttribute("opacity", "0.9");
@@ -1007,8 +1080,6 @@ const flowLoaderCancel = document.getElementById("flow-loader-cancel");
 
 const flowOverlayEl = document.getElementById("flow-overlay");
 const flowOverlayBody = document.getElementById("flow-overlay-body");
-const flowOverlayTitle = document.getElementById("flow-overlay-title");
-const flowOverlaySubtitle = document.getElementById("flow-overlay-subtitle");
 const flowOverlayCloseBtn = document.getElementById("flow-overlay-close");
 
 let flowReceivedSteps = new Set();   // step keys we've heard about
@@ -1198,17 +1269,11 @@ const FLOW_CATEGORY_ORDER = [
   "Contextual",
 ];
 const FLOW_SEVERITY_ORDER = { High: 0, Medium: 1, Low: 2 };
-const FLOW_SEVERITY_COLOURS = { High: "#ff3b30", Medium: "#ff9500", Low: "#0a84ff" };
+const FLOW_SEVERITY_COLOURS = { Critical: "#FF0000", High: "#FF6200", Medium: "#FFB700", Low: "#0a84ff" };
 
 function renderFlowAnalysisIntoOverlay(payload) {
   const fa = payload.flow_analysis || {};
   const fm = payload.flow_metadata || {};
-
-  // Header subtitle on the overlay shell — small contextual line.
-  const headerCtx = [fm.client || fm.sector, fm.platform, fm.user_goal]
-    .filter(Boolean).join(" · ");
-  flowOverlayTitle.textContent = fm.flow_name || fa.flow_name || "Flow Analysis";
-  flowOverlaySubtitle.textContent = headerCtx;
 
   const journeyScore = fa.journey_score;
   const scoreColour = scoreColourFor(journeyScore);
@@ -1382,7 +1447,7 @@ const overlayClose = document.getElementById("cov-close");
 
 const SEVERITY_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
 const SEVERITY_COLOURS = {
-  Critical: "#ff3b30", High: "#ff9500", Medium: "#ffcc00", Low: "#0a84ff",
+  Critical: "#FF0000", High: "#FF6200", Medium: "#FFB700", Low: "#0a84ff",
 };
 const CATEGORY_ORDER = [
   "Functional Usability",
@@ -1488,8 +1553,10 @@ function renderBlankStateIntoOverlay(path) {
         <div class="cov-blank-thumb">
           <img src="${screenshotUrl}" alt="Screenshot preview" />
         </div>
-        <div class="cov-blank-text">This screen has not been analysed yet.</div>
-        <button class="cov-blank-btn" id="cov-blank-analyse">Analyse Screen</button>
+        <button class="cov-blank-btn" id="cov-blank-analyse">
+          <img class="cov-blank-btn-ico" src="/static/magnifier.png" alt="" aria-hidden="true" />
+          Analyse Screen
+        </button>
       </div>
     </div>`;
   const btn = overlayBody.querySelector("#cov-blank-analyse");
@@ -1577,12 +1644,6 @@ function renderScreenAnalysisIntoOverlay(path, result) {
     })
     .filter(Boolean).join("");
 
-  const topFinding = result.top_priority_finding ? `
-    <div class="cov-top-finding">
-      <div class="cov-top-label">Top Priority</div>
-      ${escapeHtml(result.top_priority_finding)}
-    </div>` : "";
-
   overlayBody.innerHTML = `
     <aside class="cov-sidebar">
       <header class="cov-sidebar-header">
@@ -1597,7 +1658,6 @@ function renderScreenAnalysisIntoOverlay(path, result) {
           </div>
         </div>
         <div class="cov-rationale">${escapeHtml(result.score_rationale || "")}</div>
-        ${topFinding}
       </header>
       <div class="cov-findings">${catHtml || '<div class="cov-rationale">No findings.</div>'}</div>
     </aside>

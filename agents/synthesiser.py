@@ -69,8 +69,7 @@ Return JSON matching this exact schema:
   ],
   "overall_score":         <int 1-10>,
   "score_rationale":       "<one sentence explaining the score>",
-  "critical_issues_count": <int>,
-  "top_priority_finding":  "<the single most important issue across all categories, in one sentence>"
+  "critical_issues_count": <int>
 }
 
 `curated_findings` MUST be the deduplicated, proportional set you produce.

@@ -11,9 +11,9 @@
 
   <div class="brand-bar">
     <img class="brand-logo-mark"
-         src="3.svg"
-         data-logo-dark="3.svg"
-         data-logo-light="site.svg"
+         src="extension_dark.png"
+         data-logo-dark="extension_dark.png"
+         data-logo-light="extension_light.png"
          alt="AUX" />
     <span class="brand-name">AUX</span>
   </div>
@@ -22,22 +22,17 @@
        SETUP — New / Edit Flow form (opens by default)
        ========================================================= -->
   <section id="state-setup">
-    <header class="hdr">
-      <button class="back-btn hidden" id="setup-back" title="Back">←</button>
-      <h2 id="setup-title">New Flow</h2>
-    </header>
-
     <form id="flow-form" novalidate>
-      <label>Flow Name <span class="req">*</span>
+      <label><span class="label-text">Flow Name <span class="req">*</span></span>
         <input type="text" name="flow_name" placeholder="e.g. Credit Card Application" required />
       </label>
 
-      <label>Client <span class="req">*</span>
+      <label><span class="label-text">Client <span class="req">*</span></span>
         <input type="text" name="client" list="client-list" placeholder="Type or pick a client" autocomplete="off" required />
         <datalist id="client-list"></datalist>
       </label>
 
-      <label>Platform <span class="req">*</span>
+      <label><span class="label-text">Platform <span class="req">*</span></span>
         <select name="platform" required>
           <option value="">—</option>
           <option>Web</option>
@@ -45,17 +40,17 @@
         </select>
       </label>
 
-      <label>Target User
+      <label><span class="label-text">Target User</span>
         <input type="text" name="target_user" placeholder="Existing customer, mobile-first" />
       </label>
 
-      <label>User Goal
+      <label><span class="label-text">User Goal</span>
         <input type="text" name="user_goal" placeholder="Apply for a credit card in under 3 minutes" />
       </label>
 
       <div class="form-actions">
         <button type="button" class="btn ghost tight hidden" id="setup-cancel">Cancel</button>
-        <button type="submit" class="btn primary tight" id="setup-submit" disabled>Begin Capture</button>
+        <button type="submit" class="btn primary tight" id="setup-submit" disabled>Capture</button>
       </div>
     </form>
   </section>

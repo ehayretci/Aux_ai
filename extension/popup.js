@@ -5,7 +5,7 @@
 //   - SETUP   (default; or "edit" when launched from State 3)
 //   - ACTIVE  (shown immediately when a flow is recording)
 //
-// Required fields (Flow Name, Client, Platform) gate "Begin Capture".
+// Required fields (Flow Name, Client, Platform) gate "Capture".
 // Active view polls /api/session/<id> for live state/screen counts.
 // =================================================================
 
@@ -19,10 +19,8 @@ const stateActive = document.getElementById('state-active');
 const banner = document.getElementById('server-banner');
 
 // Setup
-const setupTitle = document.getElementById('setup-title');
 const setupSubmit = document.getElementById('setup-submit');
 const setupCancel = document.getElementById('setup-cancel');
-const setupBack = document.getElementById('setup-back');
 const flowForm = document.getElementById('flow-form');
 const clientList = document.getElementById('client-list');
 
@@ -57,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await routeBasedOnRecordingState();
 
   setupCancel.addEventListener('click', onSetupCancel);
-  setupBack.addEventListener('click', onSetupCancel);
   flowForm.addEventListener('submit', onFormSubmit);
 
   // Validate required fields on every change so the submit button reflects state.
@@ -101,10 +98,8 @@ async function routeBasedOnRecordingState() {
     // Default: open straight into the New Flow form (no splash).
     isEditingDuringRecording = false;
     flowForm.reset();
-    setupTitle.textContent = 'New Flow';
-    setupSubmit.textContent = 'Begin Capture';
+    setupSubmit.textContent = 'Capture';
     setupCancel.classList.add('hidden');
-    setupBack.classList.add('hidden');
     showOnly(stateSetup);
     updateSubmitState();
   }
@@ -113,10 +108,8 @@ async function routeBasedOnRecordingState() {
 // ----- Setup view -----
 function showSetup({ editing }) {
   isEditingDuringRecording = !!editing;
-  setupTitle.textContent = editing ? 'Edit Flow' : 'New Flow';
-  setupSubmit.textContent = editing ? 'Save' : 'Begin Capture';
+  setupSubmit.textContent = editing ? 'Save' : 'Capture';
   setupCancel.classList.toggle('hidden', !editing);
-  setupBack.classList.toggle('hidden', !editing);
 
   flowForm.reset();
   if (editing) {
